@@ -1,4 +1,7 @@
 Flask
 flask_sqlalchemy
 flask_migrate
+flasgger
 psycopg2-binary
+python-dotenv
+gunicorn
