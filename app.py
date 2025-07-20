@@ -3,9 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flasgger import Swagger
 import os
+from dotenv import load_dotenv
 
 from config import DevConfig, ProdConfig
 
+load_dotenv()
 app = Flask(__name__)
 env = os.getenv("FLASK_ENV", "development")
 app.config.from_object(ProdConfig if env == "production" else DevConfig)
