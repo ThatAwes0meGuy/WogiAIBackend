@@ -3,6 +3,7 @@ from datetime import datetime
 from app import db
 from auth import token_required
 from models.heartbeat import Heartbeat
+from flasgger import swag_from
 
 heartbeat_bp = Blueprint("heartbeat", __name__)
 

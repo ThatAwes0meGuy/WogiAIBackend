@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify
 from auth import token_required
+from flasgger import swag_from
 
 config_bp = Blueprint("config", __name__)
 

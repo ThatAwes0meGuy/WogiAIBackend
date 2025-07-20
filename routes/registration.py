@@ -3,6 +3,7 @@ from auth import token_required
 from models.node import Node
 from app import db
 from datetime import datetime
+from flasgger import swag_from
 
 registration_bp = Blueprint("register", __name__)
 
