@@ -7,6 +7,27 @@ from datetime import datetime
 registration_bp = Blueprint("register", __name__)
 
 @registration_bp.route("/register/node", methods=["POST"])
+@swag_from({
+    "tags": ["Node Registration"],
+    "summary": "Register a new node",
+    "parameters": [
+        {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": True
+        },
+        {
+            "name": "body",
+            "in": "body",
+            "required": True,
+            "schema": {"$ref": "#/definitions/NodeRegistration"}
+        }
+    ],
+    "responses": {
+        201: {"description": "Node registered and config returned"}
+    }
+})
 @token_required
 def register_node():
     data = request.json

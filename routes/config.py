@@ -4,6 +4,17 @@ from auth import token_required
 config_bp = Blueprint("config", __name__)
 
 @config_bp.route("/config/node/<string:node_id>", methods=["GET"])
+@swag_from({
+    "tags": ["Config"],
+    "summary": "Get node configuration",
+    "parameters": [
+        {"name": "Authorization", "in": "header", "type": "string", "required": True},
+        {"name": "node_id", "in": "path", "type": "string", "required": True}
+    ],
+    "responses": {
+        200: {"description": "Node configuration JSON"}
+    }
+})
 @token_required
 def get_node_config(node_id):
     return jsonify({
@@ -36,6 +47,17 @@ def get_node_config(node_id):
     }), 200
 
 @config_bp.route("/config/wifi/<string:node_id>", methods=["GET"])
+@swag_from({
+    "tags": ["Config"],
+    "summary": "Get WiFi configuration for node",
+    "parameters": [
+        {"name": "Authorization", "in": "header", "type": "string", "required": True},
+        {"name": "node_id", "in": "path", "type": "string", "required": True}
+    ],
+    "responses": {
+        200: {"description": "WiFi configuration JSON"}
+    }
+})
 @token_required
 def get_wifi_config(node_id):
     return jsonify({

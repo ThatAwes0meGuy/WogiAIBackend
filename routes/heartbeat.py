@@ -7,6 +7,28 @@ from models.heartbeat import Heartbeat
 heartbeat_bp = Blueprint("heartbeat", __name__)
 
 @heartbeat_bp.route("/data/heartbeat", methods=["POST"])
+@swag_from({
+    "tags": ["Heartbeat"],
+    "summary": "Upload heartbeat data",
+    "parameters": [
+        {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": True,
+            "default": "Bearer your_token_here"
+        },
+        {
+            "name": "body",
+            "in": "body",
+            "schema": {"$ref": "#/definitions/HeartbeatData"},
+            "required": True
+        }
+    ],
+    "responses": {
+        201: {"description": "Heartbeat stored"}
+    }
+})
 @token_required
 def upload_heartbeat():
     try:
@@ -29,6 +51,27 @@ def upload_heartbeat():
         return jsonify({"error": str(e)}), 400
 
 @heartbeat_bp.route("/data/heartbeat/<string:node_id>", methods=["GET"])
+@swag_from({
+    "tags": ["Heartbeat"],
+    "summary": "Get heartbeat data by node",
+    "parameters": [
+        {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "required": True
+        },
+        {
+            "name": "node_id",
+            "in": "path",
+            "type": "string",
+            "required": True
+        }
+    ],
+    "responses": {
+        200: {"description": "List of heartbeat entries"}
+    }
+})
 @token_required
 def get_heartbeat(node_id):
     results = Heartbeat.query.filter_by(node_id=node_id).order_by(Heartbeat.timestamp_utc.desc()).all()
