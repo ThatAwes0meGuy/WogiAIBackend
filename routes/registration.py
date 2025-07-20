@@ -1,5 +1,8 @@
 from flask import Blueprint, request, jsonify
 from auth import token_required
+from models.node import Node
+from app import db
+from datetime import datetime
 
 registration_bp = Blueprint("register", __name__)
 
@@ -7,17 +10,24 @@ registration_bp = Blueprint("register", __name__)
 @token_required
 def register_node():
     data = request.json
-    # TODO: Save node info
+    node = Node(
+        node_id=data["node_id"],
+        mac_address=data["mac_address"],
+        serial_number=data["serial_number"],
+        firmware_version=data["firmware_version"],
+        hardware_version=data["hardware_version"],
+        capabilities=data["capabilities"],
+        registered_at=datetime.utcnow()
+    )
+    db.session.add(node)
+    db.session.commit()
+
     return jsonify({
         "status": "registered",
-        "node_id": data["node_id"],
+        "node_id": node.node_id,
         "config": {
             "sample_rate_hz": 8000,
             "transmission_interval_sec": 5,
             "heartbeat_interval_sec": 30
-        },
-        "endpoints": {
-            "data_upload": "https://client-api.com/api/telemetry/v1/data/sensor",
-            "config_check": "https://client-api.com/api/telemetry/v1/config/node"
         }
     }), 201
